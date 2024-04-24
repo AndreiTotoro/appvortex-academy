@@ -8,6 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Separator } from "../ui/separator";
+import NavItems from "./NavItems";
 
 export default function MobileNav() {
   return (
@@ -31,7 +32,8 @@ export default function MobileNav() {
         </SheetTrigger>
         <SheetContent className="flex flex-col gap-6 bg-white md:hidden">
           <h1>Vortex Events</h1>
-          <Separator />
+          <Separator className="border border-grey-50" />
+          <NavItems />
         </SheetContent>
       </Sheet>
     </nav>
