@@ -1,4 +1,4 @@
-import { SignedOut, SignIn } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignIn, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";
@@ -15,6 +15,9 @@ function Header() {
         </Link>
 
         <div className="flex w-32 justify-end gap-3">
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
           <SignedOut>
             <Button
               asChild
