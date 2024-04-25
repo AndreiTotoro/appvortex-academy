@@ -242,6 +242,23 @@ const EventForm = ({ userId, type }: EventFormProps) => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="url"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input
+                    placeholder="URL"
+                    {...field}
+                    className="input-field"
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <Button type="submit">Submit</Button>
