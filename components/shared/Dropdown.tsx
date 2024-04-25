@@ -1,4 +1,4 @@
-import React, { startTransition, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -19,6 +19,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { ICategory } from "@/lib/database/models/category.model";
 import { Input } from "../ui/input";
+import {
+  createCategory,
+  getAllCategories,
+} from "@/lib/actions/category.actions";
 
 type DropdownProps = {
   value?: string;
@@ -29,7 +33,20 @@ export default function Dropdown({ value, onChangeHandler }: DropdownProps) {
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [newCategory, setNewCategory] = useState("");
 
-  const handleAddCategory = () => {};
+  const handleAddCategory = () => {
+    createCategory({ categoryName: newCategory.trim() }).then((category) => {
+      setCategories((prev) => [...prev, category]);
+    });
+  };
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const categories = await getAllCategories();
+
+      categories && setCategories(categories);
+    };
+    getCategories();
+  }, []);
 
   return (
     <Select
