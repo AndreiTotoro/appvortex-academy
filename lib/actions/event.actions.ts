@@ -24,6 +24,7 @@ export const createEvent = async ({
   try {
     await connectToDatabase();
 
+    console.log(event, "price");
     const organizer = await User.findById(userId);
 
     if (!organizer) {
@@ -32,9 +33,12 @@ export const createEvent = async ({
 
     const newEvent: IEvent = await Event.create({
       ...event,
+      price: event.price,
       category: event.categoryId,
       organizer: userId,
     });
+
+    console.log(newEvent, "newEvent");
 
     return JSON.parse(JSON.stringify(newEvent));
   } catch (error) {
