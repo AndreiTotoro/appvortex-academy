@@ -63,7 +63,7 @@ export const getAllEvents = async ({
   category,
 }: GetAllEventsParams) => {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const conditions: any = {};
 
