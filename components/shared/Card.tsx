@@ -1,4 +1,6 @@
 import { IEvent } from "@/lib/database/models/event.model";
+import { formatDateTime } from "@/lib/utils";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import React from "react";
 
@@ -9,6 +11,12 @@ type CardProps = {
 };
 
 const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
+  const { sessionClaims } = auth();
+
+  const userId = sessionClaims?.userId as string;
+
+  const isEventCreator = event.organizer._id.toString() === userId;
+
   return (
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl shadow-md transition-all hover:shadow-lg md:min-h-[480px]">
       <Link
@@ -16,6 +24,52 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
         style={{ backgroundImage: `url(${event.imageUrl})` }}
         href={`/events/${event._id}`}
       ></Link>
+      {isEventCreator && !hidePrice && (
+        <div>
+          <Link href={`/events/${event._id}/update`}>
+            <button className="absolute top-5 right-5 p-semibold-14 text-white bg-primary-500 px-4 py-1 rounded-full">
+              Edit
+            </button>
+          </Link>
+        </div>
+      )}
+      <Link
+        href={`/events/${event._id}`}
+        className="flex min-h-[230px] flex-col gap-3 p-5 md:gap-4"
+      >
+        {!hidePrice && (
+          <div className="flex gap-2">
+            <span className="p-semibold-14  rounded-full bg-green-100 px-4 py-1 text-green-600">
+              {event.isFree ? "Free" : "$ " + event.price}
+            </span>
+            <p className="p-semibold-14 rounded-full bg-grey-500/10 px-4 py-1 text-grey-500">
+              {event.category.name}
+            </p>
+          </div>
+        )}
+        <p className="p-medium-16 p-medium-18">
+          {formatDateTime(event.startDateTime).dateTime}
+        </p>
+
+        <p className="p-medium-16 md:p-medium-20 line-clamp-2 flex-1">
+          {event.title}
+        </p>
+
+        <div className="flex-between w-full">
+          <p className="p-medium-14 md:p-medium-16 text-grey-600">
+            {event.organizer.firstName} {event.organizer.lastName}
+          </p>
+
+          {hasOrderLink && (
+            <Link
+              className="flex gap-2"
+              href={`/orders?eventId=${event._id}`}
+            >
+              <p className="p-semibold-14 text-primary-500">Order Details</p>
+            </Link>
+          )}
+        </div>
+      </Link>
     </div>
   );
 };
