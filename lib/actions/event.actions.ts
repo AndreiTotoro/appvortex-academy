@@ -44,7 +44,7 @@ export const createEvent = async ({
 
 export const getEventById = async (eventId: string) => {
   try {
-    connectToDatabase();
+    await connectToDatabase();
 
     const event = await populateEvent(Event.findById(eventId));
 
